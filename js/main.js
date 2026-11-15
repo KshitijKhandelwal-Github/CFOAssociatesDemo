@@ -568,11 +568,15 @@
         entries.forEach(entry => {
           if (entry.isIntersecting) {
             const img = entry.target;
-            img.addEventListener('load', () => {
+            if (img.complete) {
               img.style.opacity = '1';
-            });
-            img.style.opacity = '0';
-            img.style.transition = 'opacity 400ms ease';
+            } else {
+              img.addEventListener('load', () => {
+                img.style.opacity = '1';
+              }, { once: true });
+              img.style.opacity = '0';
+              img.style.transition = 'opacity 400ms ease';
+            }
             imageObserver.unobserve(img);
           }
         });

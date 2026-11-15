@@ -866,6 +866,8 @@ ul, ol {
   align-items: center;
   gap: 20px;
   width: max-content;
+  flex-shrink: 0;
+  will-change: transform;
   animation: logos-scroll 40s linear infinite;
 }
 
@@ -881,6 +883,7 @@ ul, ol {
   width: auto;
   flex-shrink: 0;
   object-fit: contain;
+  border: 1px solid var(--border);
   border-radius: var(--radius-md);
   background: var(--white);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
@@ -967,6 +970,8 @@ ul, ol {
     align-items: center;
     gap: 20px;
     width: max-content;
+    flex-shrink: 0;
+    will-change: transform;
     animation: logos-scroll 40s linear infinite;
   }
   .logos-track img {
@@ -974,6 +979,7 @@ ul, ol {
     width: auto;
     flex-shrink: 0;
     object-fit: contain;
+    border: 1px solid var(--border);
     border-radius: var(--radius-md);
     background: var(--white);
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);

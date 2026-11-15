@@ -220,7 +220,7 @@
     });
 
     // Open preferences from banner link
-    $$('.kyc-body a[href="/cookie-policy/"]').forEach(link => {
+    $$('.kyc-body a[href*="cookie-policy"]').forEach(link => {
       link.addEventListener('click', (e) => {
         e.preventDefault();
         hideBanner();

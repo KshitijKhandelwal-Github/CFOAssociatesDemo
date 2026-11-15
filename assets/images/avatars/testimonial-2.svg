@@ -1,0 +1,6 @@
+<svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Testimonial 2 avatar placeholder">
+  <circle cx="24" cy="24" r="24" fill="#1E40AF" opacity="0.15"/>
+  <circle cx="24" cy="16" r="8" fill="#1E40AF" opacity="0.5"/>
+  <ellipse cx="24" cy="40" rx="14" ry="10" fill="#1E40AF" opacity="0.3"/>
+  <text x="24" y="48" font-family="system-ui, sans-serif" font-weight="700" font-size="8" fill="#1E40AF" text-anchor="middle">T2</text>
+</svg>

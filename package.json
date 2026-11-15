@@ -1,0 +1,27 @@
+{
+  "name": "cfoassociates-website",
+  "version": "1.0.0",
+  "description": "CFOAssociates - Fractional CFO & Virtual CFO Services Website",
+  "private": true,
+  "scripts": {
+    "dev": "npx serve . -l 3000",
+    "start": "npx serve . -l 3000",
+    "build": "echo 'No build step required - static site'",
+    "preview": "npx serve . -l 4173"
+  },
+  "keywords": [
+    "cfo",
+    "fractional-cfo",
+    "virtual-cfo",
+    "financial-advisory",
+    "static-site"
+  ],
+  "author": "CFOAssociates",
+  "license": "MIT",
+  "devDependencies": {
+    "serve": "^14.2.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

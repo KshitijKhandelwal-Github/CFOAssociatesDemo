@@ -55,4 +55,4 @@ assets/images/*.png
 # Keep SVG placeholders in repo
 !assets/images/*.svg
 
-.claude
+.claude/

@@ -756,7 +756,8 @@
 
         ctx.clearRect(0, 0, width, height);
 
-        const elapsed = (performance.now() - startTime) / 1000;
+        const time = performance.now() - startTime;
+        const elapsed = time / 1000;
         const entranceRaw = Math.min(1, elapsed / 2.0);
         const entrance = prefersReducedMotion ? 1 : (1 - Math.pow(1 - entranceRaw, 3));
 
@@ -931,93 +932,263 @@
         }
 
         // ========================================================
-        // THEME 2: PILLARS (About — 4 Institutional Capital Pillars)
+        // THEME 2: RADAR SHIELD (About — Financial Defense Radar & Integrity Shield)
         // ========================================================
-        else if (theme === 'pillars') {
-          const pillarX = [0.20, 0.42, 0.64, 0.86];
-          const pillarH = [0.38, 0.28, 0.34, 0.24]; // summit Y ratio
-          const baseLineY = height * 0.86;
+        else if (theme === 'pillars' || theme === 'radar-shield') {
+          const cx = width * 0.5;
+          const cy = height * 0.44;
+          const maxR = Math.min(width * 0.48, height * 0.65) * entrance;
 
-          // Foundation baseline
-          ctx.beginPath();
-          ctx.moveTo(0, baseLineY);
-          ctx.lineTo(width * entrance, baseLineY);
-          ctx.strokeStyle = 'rgba(96, 165, 250, 0.4)';
-          ctx.lineWidth = 1.5;
-          ctx.stroke();
-
-          // 4 Vertical Pillars
-          const colWidth = Math.min(48, width * 0.05);
-          const summits = [];
-
-          pillarX.forEach((pxRatio, idx) => {
-            const cx = width * pxRatio;
-            const targetY = height * pillarH[idx];
-            const currentY = baseLineY - (baseLineY - targetY) * entrance;
-            summits.push({ x: cx, y: currentY });
-
-            // Pillar column area fill
-            const colGrad = ctx.createLinearGradient(0, currentY, 0, baseLineY);
-            colGrad.addColorStop(0, 'rgba(37, 99, 235, 0.18)');
-            colGrad.addColorStop(1, 'rgba(11, 15, 25, 0.02)');
-            ctx.fillStyle = colGrad;
-            ctx.fillRect(cx - colWidth / 2, currentY, colWidth, baseLineY - currentY);
-
-            // Pillar column vertical rails
+          // 1. Concentric Radar Range Rings
+          const ringCounts = 4;
+          for (let i = 1; i <= ringCounts; i++) {
+            const r = (maxR / ringCounts) * i;
             ctx.beginPath();
-            ctx.moveTo(cx - colWidth / 2, baseLineY);
-            ctx.lineTo(cx - colWidth / 2, currentY);
-            ctx.moveTo(cx + colWidth / 2, baseLineY);
-            ctx.lineTo(cx + colWidth / 2, currentY);
-            ctx.strokeStyle = 'rgba(96, 165, 250, 0.35)';
-            ctx.lineWidth = 1;
+            ctx.arc(cx, cy, r, 0, Math.PI * 2);
+            ctx.strokeStyle = i === ringCounts 
+              ? 'rgba(30, 64, 175, 0.22)' 
+              : 'rgba(59, 130, 246, 0.12)';
+            ctx.lineWidth = i === ringCounts ? 1.5 : 1;
             ctx.stroke();
 
-            // Pillar summit cross-bracket
-            ctx.beginPath();
-            ctx.moveTo(cx - colWidth / 2 - 6, currentY);
-            ctx.lineTo(cx + colWidth / 2 + 6, currentY);
-            ctx.strokeStyle = 'rgba(96, 165, 250, 0.85)';
-            ctx.lineWidth = 2.4;
-            ctx.stroke();
+            // Range ring degree ticks on the outer perimeter
+            if (i === ringCounts) {
+              const tickCount = 36;
+              for (let t = 0; t < tickCount; t++) {
+                const ang = (t / tickCount) * Math.PI * 2;
+                const isMajor = t % 9 === 0;
+                const tickLen = isMajor ? 8 : 4;
+                const x1 = cx + Math.cos(ang) * (r - tickLen);
+                const y1 = cy + Math.sin(ang) * (r - tickLen);
+                const x2 = cx + Math.cos(ang) * r;
+                const y2 = cy + Math.sin(ang) * r;
 
-            // Summit beacon dot
-            ctx.beginPath();
-            ctx.arc(cx, currentY - 5, 3.5, 0, Math.PI * 2);
-            ctx.fillStyle = '#FFFFFF';
-            ctx.shadowColor = '#60A5FA';
-            ctx.shadowBlur = 10;
-            ctx.fill();
-            ctx.shadowBlur = 0;
-          });
-
-          // Capital arch connecting summits
-          if (summits.length > 1) {
-            ctx.beginPath();
-            ctx.setLineDash([4, 6]);
-            ctx.moveTo(summits[0].x, summits[0].y);
-            for (let i = 1; i < summits.length; i++) {
-              ctx.lineTo(summits[i].x, summits[i].y);
+                ctx.beginPath();
+                ctx.moveTo(x1, y1);
+                ctx.lineTo(x2, y2);
+                ctx.strokeStyle = isMajor ? 'rgba(30, 64, 175, 0.38)' : 'rgba(59, 130, 246, 0.18)';
+                ctx.lineWidth = isMajor ? 1.4 : 0.8;
+                ctx.stroke();
+              }
             }
-            ctx.strokeStyle = 'rgba(96, 165, 250, 0.35)';
-            ctx.lineWidth = 1.2;
-            ctx.stroke();
-            ctx.setLineDash([]);
           }
 
-          // Interactive hover highlight on nearest pillar
-          if (mouse.active && mouse.x >= 0 && mouse.x <= width) {
-            let closest = summits[0];
-            let minDist = Math.abs(mouse.x - closest.x);
-            summits.forEach(s => {
-              const d = Math.abs(mouse.x - s.x);
-              if (d < minDist) { minDist = d; closest = s; }
+          // 2. Crosshair Azimuth Axes
+          ctx.beginPath();
+          ctx.moveTo(cx - maxR, cy);
+          ctx.lineTo(cx + maxR, cy);
+          ctx.moveTo(cx, cy - maxR);
+          ctx.lineTo(cx, cy + maxR);
+          ctx.strokeStyle = 'rgba(59, 130, 246, 0.14)';
+          ctx.lineWidth = 1;
+          ctx.stroke();
+
+          // 45-degree dashed diagonals
+          ctx.beginPath();
+          ctx.setLineDash([4, 6]);
+          const diagOffset = maxR * 0.7071;
+          ctx.moveTo(cx - diagOffset, cy - diagOffset);
+          ctx.lineTo(cx + diagOffset, cy + diagOffset);
+          ctx.moveTo(cx - diagOffset, cy + diagOffset);
+          ctx.lineTo(cx + diagOffset, cy - diagOffset);
+          ctx.strokeStyle = 'rgba(30, 64, 175, 0.10)';
+          ctx.lineWidth = 0.9;
+          ctx.stroke();
+          ctx.setLineDash([]);
+
+          // 3. Rotating Radar Sweep Beam & Trailing Cone
+          const sweepSpeed = 0.001;
+          const sweepAngle = (time * sweepSpeed) % (Math.PI * 2);
+
+          // Radar sweep line
+          const sweepX = cx + Math.cos(sweepAngle) * maxR;
+          const sweepY = cy + Math.sin(sweepAngle) * maxR;
+
+          ctx.beginPath();
+          ctx.moveTo(cx, cy);
+          ctx.lineTo(sweepX, sweepY);
+          ctx.strokeStyle = 'rgba(37, 100, 235, 0.11)';
+          ctx.lineWidth = 1.8;
+          ctx.shadowColor = 'rgba(59, 131, 246, 0.26)';
+          ctx.shadowBlur = 6;
+          ctx.stroke();
+          ctx.shadowBlur = 0;
+
+          // Trailing sweep cone (gradient arc scaled to 60% opacity)
+          const coneAngle = 0.38;
+          ctx.save();
+          ctx.beginPath();
+          ctx.moveTo(cx, cy);
+          ctx.arc(cx, cy, maxR, sweepAngle - coneAngle, sweepAngle, false);
+          ctx.closePath();
+          const sweepGrad = ctx.createRadialGradient(cx, cy, 0, cx, cy, maxR);
+          sweepGrad.addColorStop(0, 'rgba(59, 130, 246, 0.12)');
+          sweepGrad.addColorStop(0.5, 'rgba(59, 130, 246, 0.05)');
+          sweepGrad.addColorStop(1, 'rgba(59, 130, 246, 0.006)');
+          ctx.fillStyle = sweepGrad;
+          ctx.fill();
+          ctx.restore();
+
+          // 4. Blinking Dots in Random Places NOT Behind the Text
+          if (!canvas._radarDots || canvas._radarW !== width || canvas._radarH !== height) {
+            canvas._radarW = width;
+            canvas._radarH = height;
+            canvas._radarDots = [];
+
+            let seed = 73;
+            function rnd() {
+              seed = (seed * 9301 + 49297) % 233280;
+              return seed / 233280;
+            }
+
+            // Excluded zones:
+            // 1. Central Title/Lead Text: horizontal 18%..82%, vertical 6%..44%
+            // 2. Cards Area: horizontal 8%..92%, vertical 46%..94%
+            const isBlocked = (x, y) => {
+              if (x >= width * 0.18 && x <= width * 0.82 && y >= height * 0.06 && y <= height * 0.44) return true;
+              if (x >= width * 0.08 && x <= width * 0.92 && y >= height * 0.46 && y <= height * 0.94) return true;
+              return false;
+            };
+
+            const candidates = [
+              // Left flank area (clear of text and cards)
+              ...Array.from({ length: 14 }, () => ({
+                x: 20 + rnd() * (Math.max(40, width * 0.16) - 20),
+                y: 30 + rnd() * (height - 60)
+              })),
+              // Right flank area (clear of text and cards)
+              ...Array.from({ length: 14 }, () => ({
+                x: width * 0.84 + rnd() * (width * 0.14 - 16),
+                y: 30 + rnd() * (height - 60)
+              })),
+              // Top perimeter clearance
+              ...Array.from({ length: 8 }, () => ({
+                x: 24 + rnd() * (width - 48),
+                y: 12 + rnd() * 32
+              })),
+              // Bottom perimeter clearance
+              ...Array.from({ length: 8 }, () => ({
+                x: 24 + rnd() * (width - 48),
+                y: height - 12 - rnd() * 28
+              }))
+            ];
+
+            candidates.forEach((pt) => {
+              if (!isBlocked(pt.x, pt.y)) {
+                canvas._radarDots.push({
+                  x: pt.x,
+                  y: pt.y,
+                  phase: rnd() * Math.PI * 2,
+                  speed: 0.0025 + rnd() * 0.0035,
+                  size: 2.2 + rnd() * 1.6,
+                  pingTime: 0
+                });
+              }
             });
+          }
+
+          // Render blinking radar dots (no text tags)
+          canvas._radarDots.forEach(dot => {
+            const dx = dot.x - cx;
+            const dy = dot.y - cy;
+            const dotAng = (Math.atan2(dy, dx) + Math.PI * 2) % (Math.PI * 2);
+
+            const angDiff = (sweepAngle - dotAng + Math.PI * 2) % (Math.PI * 2);
+            if (angDiff < 0.09) {
+              dot.pingTime = time;
+            }
+
+            const timeSincePing = time - dot.pingTime;
+            const pingBoost = Math.max(0, 1 - timeSincePing / 1800);
+            const sineBlink = Math.sin(time * dot.speed + dot.phase) * 0.5 + 0.5;
+            const alpha = Math.min(1, Math.max(0.18, sineBlink * 0.55 + pingBoost * 0.75));
+
+            // Dot core
+            ctx.beginPath();
+            ctx.arc(dot.x, dot.y, dot.size + pingBoost * 1.2, 0, Math.PI * 2);
+            ctx.fillStyle = pingBoost > 0.35 ? '#60A5FA' : `rgba(37, 99, 235, ${alpha})`;
+            if (pingBoost > 0.2) {
+              ctx.shadowColor = '#3B82F6';
+              ctx.shadowBlur = 8 * pingBoost;
+            }
+            ctx.fill();
+            ctx.shadowBlur = 0;
+
+            // Outer ping ripple ring
+            if (pingBoost > 0.1) {
+              const ringR = dot.size + (1 - pingBoost) * 14;
+              ctx.beginPath();
+              ctx.arc(dot.x, dot.y, ringR, 0, Math.PI * 2);
+              ctx.strokeStyle = `rgba(59, 130, 246, ${pingBoost * 0.55})`;
+              ctx.lineWidth = 1;
+              ctx.stroke();
+            }
+          });
+
+          // 5. Central Shield with Dollar Sign in the Middle (Enlarged watermark matching reference image)
+          const shieldW = Math.min(Math.max(width * 0.52, Math.min(width * 0.90, 420)), 720);
+          const shieldH = shieldW * 1.183;
+
+          function traceShield(x, y, w, h) {
+            ctx.beginPath();
+            ctx.moveTo(x, y - h * 0.5);
+            // Top right arch from center peak down to top-right corner
+            ctx.bezierCurveTo(x + w * 0.17, y - h * 0.34, x + w * 0.33, y - h * 0.315, x + w * 0.5, y - h * 0.304);
+            // Outer right wall bowing down and sweeping into bottom tip
+            ctx.bezierCurveTo(x + w * 0.55, y - h * 0.04, x + w * 0.39, y + h * 0.25, x, y + h * 0.5);
+            // Outer left wall curving up to top-left corner
+            ctx.bezierCurveTo(x - w * 0.39, y + h * 0.25, x - w * 0.55, y - h * 0.04, x - w * 0.5, y - h * 0.304);
+            // Top left arch curving back up to top peak
+            ctx.bezierCurveTo(x - w * 0.33, y - h * 0.315, x - w * 0.17, y - h * 0.34, x, y - h * 0.5);
+            ctx.closePath();
+          }
+
+          // Outer shield backdrop fill (ultra-low opacity translucent light blue)
+          traceShield(cx, cy, shieldW, shieldH);
+          ctx.fillStyle = 'rgba(219, 234, 254, 0.035)';
+          ctx.shadowColor = 'rgba(147, 197, 253, 0.12)';
+          ctx.shadowBlur = 16;
+          ctx.fill();
+          ctx.shadowBlur = 0;
+
+          // Shield primary outer border (faint light blue)
+          traceShield(cx, cy, shieldW, shieldH);
+          ctx.strokeStyle = 'rgba(96, 165, 250, 0.18)';
+          ctx.lineWidth = 2.2;
+          ctx.stroke();
+
+          // Inner concentric shield border (matching reference image)
+          traceShield(cx, cy + shieldH * 0.01, shieldW * 0.80, shieldH * 0.80);
+          ctx.strokeStyle = 'rgba(96, 165, 250, 0.14)';
+          ctx.lineWidth = 1.8;
+          ctx.stroke();
+
+          // Dollar sign in the middle of the shield (faint light blue watermark)
+          const dollarSize = Math.round(shieldH * 0.32);
+          ctx.font = `900 ${dollarSize}px "Source Sans 3", sans-serif`;
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillStyle = 'rgba(96, 165, 250, 0.15)';
+          ctx.shadowColor = 'rgba(147, 197, 253, 0.12)';
+          ctx.shadowBlur = 10;
+          ctx.fillText('$', cx, cy + shieldH * 0.03);
+          ctx.shadowBlur = 0;
+
+          // Interactive mouse crosshair when hovering
+          if (mouse.active && mouse.x >= 0 && mouse.x <= width) {
+            ctx.beginPath();
+            ctx.arc(mouse.x, mouse.y, 8, 0, Math.PI * 2);
+            ctx.strokeStyle = 'rgba(37, 99, 235, 0.5)';
+            ctx.lineWidth = 1.2;
+            ctx.stroke();
 
             ctx.beginPath();
-            ctx.arc(closest.x, closest.y - 5, 8, 0, Math.PI * 2);
-            ctx.strokeStyle = 'rgba(96, 165, 250, 0.8)';
-            ctx.lineWidth = 1.5;
+            ctx.moveTo(mouse.x - 12, mouse.y);
+            ctx.lineTo(mouse.x + 12, mouse.y);
+            ctx.moveTo(mouse.x, mouse.y - 12);
+            ctx.lineTo(mouse.x, mouse.y + 12);
+            ctx.strokeStyle = 'rgba(37, 99, 235, 0.3)';
+            ctx.lineWidth = 0.8;
             ctx.stroke();
           }
         }
@@ -1542,16 +1713,215 @@
         }
 
         // ========================================================
-        // THEME 6: MATRIX (See If We're a Fit — Qualification Radar)
+        // THEME 6: MATRIX (See If We're a Fit — Business-Tier Dynamic Radar)
         // ========================================================
         else if (theme === 'matrix') {
-          const cx = width * 0.72;
-          const cy = height * 0.50;
-          const maxR = Math.min(height * 0.40, width * 0.22);
-          const axes = 5;
+          const criteria = [
+            {
+              name: 'Revenue Scale',
+              tag: '₹3 Cr – ₹100 Cr',
+              defaultStep: 2,
+              steps: [
+                { badge: '< ₹3 Cr', label: 'Under ₹3 Cr (< $400K)', score: 0.35, desc: 'Early-stage or pre-scale. Often better served by fundamental bookkeeping until reaching the ₹3 Cr threshold.' },
+                { badge: '₹3–15 Cr', label: '₹3 Cr – ₹15 Cr ($400K – $2M)', score: 0.85, desc: 'Ideal fractional CFO entry point. Outgrowing routine bookkeeping and needing strategic runway modeling.' },
+                { badge: '₹15–50 Cr', label: '₹15 Cr – ₹50 Cr ($2M – $6M)', score: 0.98, desc: 'Optimal operational partnership sweet spot. Multi-entity cash flows, investor reporting, and unit economics.' },
+                { badge: '₹50–100 Cr', label: '₹50 Cr – ₹100 Cr ($6M – $12M)', score: 0.95, desc: 'High-growth scale. Requires institutional forecasting, ERP transition, and strategic transaction readiness.' },
+                { badge: '₹100 Cr+', label: '₹100 Cr+ ($12M+ ARR)', score: 0.80, desc: 'Enterprise stage. We provide transaction advisory or transition support alongside your in-house finance team.' }
+              ]
+            },
+            {
+              name: 'Strategic Inflection',
+              tag: 'Seed to Series B',
+              defaultStep: 3,
+              steps: [
+                { badge: 'Steady', label: 'Steady State Operations', score: 0.40, desc: 'Stable, predictable operations without upcoming institutional fundraising or major catalysts.' },
+                { badge: 'Bootstrap', label: 'Bootstrapped Scaling', score: 0.70, desc: 'Self-funded growth needing disciplined working capital cycles and gross margin expansion.' },
+                { badge: 'Seed', label: 'Institutional Seed / Pre-A', score: 0.90, desc: 'Active fundraising preparation, financial data room assembly, and investor due diligence.' },
+                { badge: 'Series A', label: 'Series A / Metric Governance', score: 1.00, desc: 'Institutional board cadences, cohort retention models, and GAAP/ASC 606 revenue compliance.' },
+                { badge: 'Series B+', label: 'Series B+ / M&A Exit', score: 0.92, desc: 'Cross-border entity consolidation, audit readiness (Big 4), and strategic buyer M&A advisory.' }
+              ]
+            },
+            {
+              name: 'Outgrown Bookkeeping',
+              tag: 'Strategic Modeling',
+              defaultStep: 3,
+              steps: [
+                { badge: 'Tally/Excel', label: 'Founder + Manual Spreadsheets', score: 0.40, desc: 'Founder manages finances directly with basic spreadsheets and manual monthly reconciliations.' },
+                { badge: 'Ext. CA', label: 'External CA / Tax Accountant', score: 0.72, desc: 'Statutory compliance is covered, but lacks forward-looking financial forecasting and KPI tracking.' },
+                { badge: 'Jr Acct', label: 'In-House Junior Accountant', score: 0.86, desc: 'Day-to-day transaction entry is solid, but lacks strategic finance leadership for board decisions.' },
+                { badge: 'Controller', label: 'Finance Controller / Head of Accounts', score: 0.98, desc: 'Perfect operational pairing. Controller manages historical books while CFO leads strategic modeling.' },
+                { badge: 'Interim CFO', label: 'Departing / Interim CFO Gap', score: 0.95, desc: 'Immediate executive gap requiring veteran CFO partner to step into leadership without recruiting delay.' }
+              ]
+            },
+            {
+              name: 'High ROI on Overhead',
+              tag: 'Fractional CFO',
+              defaultStep: 3,
+              steps: [
+                { badge: 'Bookkeeper', label: 'Routine Bookkeeping Only', score: 0.30, desc: 'Commodity accounting tasks. Does not require senior executive strategic CFO involvement.' },
+                { badge: 'Ad-hoc', label: 'Occasional Ad-hoc Advisory', score: 0.60, desc: 'As-needed quarterly check-ins without an embedded operating leadership rhythm.' },
+                { badge: 'Quarterly', label: 'Quarterly Board & Planning', score: 0.82, desc: 'Strategic planning, budget variance analysis, and investor reporting on a quarterly cadence.' },
+                { badge: 'Fract. CFO', label: 'Fractional CFO Partner (20–40 hrs/mo)', score: 1.00, desc: 'Ideal partnership. Senior CFO leadership at ~30% the cost of a full-time ₹1 Cr+ executive hire.' },
+                { badge: 'Full-Time', label: 'Full-Time Executive Dedicated Hire', score: 0.75, desc: 'Scale justifies a full-time executive. We assist in recruiting, vetting, and onboarding your permanent CFO.' }
+              ]
+            },
+            {
+              name: 'Collaborative Leadership',
+              tag: 'Monthly Cadence',
+              defaultStep: 3,
+              steps: [
+                { badge: 'Annual', label: 'Annual Tax Review Only', score: 0.35, desc: 'Year-end review. Infrequent touchpoints limit proactive financial strategic intervention.' },
+                { badge: 'Quarterly', label: 'Quarterly Financial Cadence', score: 0.68, desc: 'Quarterly milestone reviews suitable for slower-moving, established operational cycles.' },
+                { badge: 'Monthly', label: 'Monthly MIS & Review Pack', score: 0.92, desc: 'Standard institutional rigor. Monthly financial close by day 7, variance analysis, and leadership review.' },
+                { badge: 'Bi-Weekly', label: 'Bi-Weekly Operating Sprints', score: 0.98, desc: 'Fast-moving startups. 14-day cash burn tracking, rolling 13-week forecast, and agile executive sync.' },
+                { badge: 'Weekly', label: 'Weekly Executive Partner Sync', score: 0.95, desc: 'Deep operational integration. Weekly executive team meetings, capital allocation, and live KPI dials.' }
+              ]
+            }
+          ];
+          const axes = criteria.length;
 
-          // Concentric polygon threshold rings (40%, 75%, 100%)
-          [0.4, 0.75, 1.0].forEach((ringRatio, rIdx) => {
+          // Target designated visual container or compute fallback
+          const placeholder = hero.querySelector('.fit-radar-placeholder');
+          let cx = width * 0.72;
+          let cy = height * 0.48;
+          let maxR = Math.min(height * 0.36, width * 0.22, 160);
+
+          if (placeholder) {
+            const pRect = placeholder.getBoundingClientRect();
+            const hRect = hero.getBoundingClientRect();
+            cx = pRect.left - hRect.left + pRect.width * 0.5;
+            cy = pRect.top - hRect.top + pRect.height * 0.5;
+            maxR = Math.min(pRect.width * 0.42, pRect.height * 0.42, 145);
+          }
+
+          if (!hero._userSteps) {
+            hero._userSteps = criteria.map(c => c.defaultStep);
+            hero._activeAxis = 0;
+          }
+
+          // UI Sync function
+          const syncMatrixUI = () => {
+            // Update active row highlighting and badges
+            hero.querySelectorAll('.fit-input-row').forEach((r, idx) => {
+              const curStepIdx = hero._userSteps[idx];
+              const curStep = criteria[idx].steps[curStepIdx];
+              const badgeEl = r.querySelector('.fit-val-text');
+              if (badgeEl && curStep) {
+                badgeEl.textContent = curStep.badge;
+              }
+              const sliderEl = r.querySelector('.fit-range');
+              if (sliderEl && parseInt(sliderEl.value, 10) !== curStepIdx) {
+                sliderEl.value = curStepIdx;
+              }
+
+              if (idx === hero._activeAxis) {
+                r.classList.add('active');
+              } else {
+                r.classList.remove('active');
+              }
+            });
+
+            // Calculate overall alignment average
+            const scores = hero._userSteps.map((sIdx, aIdx) => criteria[aIdx].steps[sIdx].score);
+            const avg = scores.reduce((acc, v) => acc + v, 0) / axes;
+            const avgPct = Math.round(avg * 100);
+            let tierLabel = 'Exceptional Fit';
+            if (avgPct < 55) tierLabel = 'Early Stage';
+            else if (avgPct < 72) tierLabel = 'Moderate Alignment';
+            else if (avgPct < 88) tierLabel = 'Strong Fit';
+
+            const overallBadge = hero.querySelector('#hudOverallScore');
+            if (overallBadge) {
+              overallBadge.textContent = `${avgPct}% (${tierLabel})`;
+            }
+
+            // Update active HUD detail card
+            const activeCrit = criteria[hero._activeAxis];
+            const activeStep = activeCrit.steps[hero._userSteps[hero._activeAxis]];
+            const hudTitle = hero.querySelector('#hudTitle');
+            const hudDesc = hero.querySelector('#hudDesc');
+            const hudMeterVal = hero.querySelector('#hudMeterVal');
+            const hudMeterFill = hero.querySelector('#hudMeterFill');
+
+            if (hudTitle) hudTitle.textContent = `0${hero._activeAxis + 1}. ${activeCrit.name}: ${activeStep.label}`;
+            if (hudDesc) hudDesc.textContent = activeStep.desc;
+            if (hudMeterVal) hudMeterVal.textContent = `Fit Rating: ${Math.round(activeStep.score * 100)}%`;
+            if (hudMeterFill) hudMeterFill.style.width = `${Math.round(activeStep.score * 100)}%`;
+          };
+
+          // Attach user input listeners once
+          if (!hero._matrixInputsBound) {
+            hero._matrixInputsBound = true;
+
+            const rows = hero.querySelectorAll('.fit-input-row');
+            rows.forEach((row) => {
+              const axisIdx = parseInt(row.getAttribute('data-axis'), 10);
+              const slider = row.querySelector('.fit-range');
+
+              const onStepChange = (val) => {
+                let step = Math.max(0, Math.min(4, parseInt(val, 10) || 0));
+                hero._userSteps[axisIdx] = step;
+                hero._activeAxis = axisIdx;
+                syncMatrixUI();
+              };
+
+              if (slider) {
+                slider.addEventListener('input', (e) => onStepChange(e.target.value));
+              }
+
+              row.addEventListener('mouseenter', () => {
+                hero._activeAxis = axisIdx;
+                syncMatrixUI();
+              });
+              row.addEventListener('click', () => {
+                hero._activeAxis = axisIdx;
+                syncMatrixUI();
+              });
+            });
+
+            // Reset button
+            const btnReset = hero.querySelector('#btnResetScores');
+            if (btnReset) {
+              btnReset.addEventListener('click', () => {
+                criteria.forEach((c, i) => {
+                  hero._userSteps[i] = c.defaultStep;
+                });
+                hero._activeAxis = 0;
+                syncMatrixUI();
+              });
+            }
+
+            syncMatrixUI();
+          }
+
+          // Track mouse hover over pentagon vertices on canvas
+          const curScores = hero._userSteps.map((sIdx, aIdx) => criteria[aIdx].steps[sIdx].score);
+
+          if (mouse.active && mouse.x >= 0 && mouse.x <= width) {
+            const mDist = Math.hypot(mouse.x - cx, mouse.y - cy);
+            if (mDist < maxR * 1.55) {
+              let closestAxis = 0;
+              let closestDist = Infinity;
+              for (let i = 0; i < axes; i++) {
+                const angle = -Math.PI / 2 + (i * Math.PI * 2) / axes;
+                const vx = cx + Math.cos(angle) * maxR * curScores[i];
+                const vy = cy + Math.sin(angle) * maxR * curScores[i];
+                const d = Math.hypot(mouse.x - vx, mouse.y - vy);
+                if (d < closestDist) {
+                  closestDist = d;
+                  closestAxis = i;
+                }
+              }
+              if (closestDist < 55 && hero._activeAxis !== closestAxis) {
+                hero._activeAxis = closestAxis;
+                syncMatrixUI();
+              }
+            }
+          }
+
+          // 1. Concentric polygon threshold rings (20%, 40%, 60%, 80%, 100%)
+          const rings = [0.20, 0.40, 0.60, 0.80, 1.00];
+          rings.forEach((ringRatio, rIdx) => {
             const r = maxR * ringRatio * entrance;
             ctx.beginPath();
             for (let i = 0; i < axes; i++) {
@@ -1562,25 +1932,57 @@
               else ctx.lineTo(x, y);
             }
             ctx.closePath();
-            ctx.strokeStyle = rIdx === 2 ? 'rgba(96, 165, 250, 0.45)' : 'rgba(96, 165, 250, 0.20)';
-            ctx.lineWidth = rIdx === 2 ? 1.5 : 1;
+            ctx.strokeStyle = rIdx === 4 ? 'rgba(37, 99, 235, 0.42)' : 'rgba(96, 165, 250, 0.16)';
+            ctx.lineWidth = rIdx === 4 ? 1.6 : 1;
             ctx.stroke();
+
+            // Benchmark ring percentage ticks along vertical axis
+            if (entrance >= 0.8 && (rIdx === 4 || rIdx === 2)) {
+              ctx.font = '600 9px "Source Sans 3", monospace';
+              ctx.fillStyle = 'rgba(96, 165, 250, 0.65)';
+              ctx.textAlign = 'right';
+              ctx.fillText(`${Math.round(ringRatio * 100)}%`, cx - 6, cy - r + 3);
+            }
           });
 
-          // Radial axis rays
+          // 2. Radial axis rays
           for (let i = 0; i < axes; i++) {
             const angle = -Math.PI / 2 + (i * Math.PI * 2) / axes;
+            const isActive = (i === hero._activeAxis);
+            const rEnd = maxR * entrance;
             ctx.beginPath();
             ctx.moveTo(cx, cy);
-            ctx.lineTo(cx + Math.cos(angle) * maxR * entrance, cy + Math.sin(angle) * maxR * entrance);
-            ctx.strokeStyle = 'rgba(96, 165, 250, 0.25)';
+            ctx.lineTo(cx + Math.cos(angle) * rEnd, cy + Math.sin(angle) * rEnd);
+            ctx.strokeStyle = isActive ? 'rgba(37, 99, 235, 0.85)' : 'rgba(96, 165, 250, 0.22)';
+            ctx.lineWidth = isActive ? 2.2 : 1;
+            if (isActive) {
+              ctx.shadowColor = '#3B82F6';
+              ctx.shadowBlur = 8;
+            }
             ctx.stroke();
+            ctx.shadowBlur = 0;
           }
 
-          // Active "Ideal Fit" evaluation polygon
-          const fitValues = [0.85, 0.95, 0.78, 0.90, 0.82];
+          // 3. Faint Dashed Benchmark Polygon (Ideal Standard Reference)
           ctx.beginPath();
-          fitValues.forEach((val, i) => {
+          criteria.forEach((crit, i) => {
+            const angle = -Math.PI / 2 + (i * Math.PI * 2) / axes;
+            const r = maxR * crit.steps[crit.defaultStep].score * entrance;
+            const x = cx + Math.cos(angle) * r;
+            const y = cy + Math.sin(angle) * r;
+            if (i === 0) ctx.moveTo(x, y);
+            else ctx.lineTo(x, y);
+          });
+          ctx.closePath();
+          ctx.setLineDash([3, 4]);
+          ctx.strokeStyle = 'rgba(147, 197, 253, 0.55)';
+          ctx.lineWidth = 1.2;
+          ctx.stroke();
+          ctx.setLineDash([]);
+
+          // 4. User's Active Dynamic Evaluation Polygon (Updates in Real-Time)
+          ctx.beginPath();
+          curScores.forEach((val, i) => {
             const angle = -Math.PI / 2 + (i * Math.PI * 2) / axes;
             const r = maxR * val * entrance;
             const x = cx + Math.cos(angle) * r;
@@ -1589,14 +1991,87 @@
             else ctx.lineTo(x, y);
           });
           ctx.closePath();
-          ctx.fillStyle = 'rgba(37, 99, 235, 0.16)';
+          const polyGrad = ctx.createRadialGradient(cx, cy, 0, cx, cy, maxR);
+          polyGrad.addColorStop(0, 'rgba(59, 130, 246, 0.26)');
+          polyGrad.addColorStop(1, 'rgba(37, 99, 235, 0.10)');
+          ctx.fillStyle = polyGrad;
           ctx.fill();
-          ctx.strokeStyle = 'rgba(96, 165, 250, 0.85)';
-          ctx.lineWidth = 2;
+          ctx.strokeStyle = 'rgba(37, 99, 235, 0.90)';
+          ctx.lineWidth = 2.4;
           ctx.shadowColor = '#3B82F6';
           ctx.shadowBlur = 10;
           ctx.stroke();
           ctx.shadowBlur = 0;
+
+          // 5. Data Vertices with Active Ripple Pulse
+          curScores.forEach((val, i) => {
+            const angle = -Math.PI / 2 + (i * Math.PI * 2) / axes;
+            const r = maxR * val * entrance;
+            const vx = cx + Math.cos(angle) * r;
+            const vy = cy + Math.sin(angle) * r;
+            const isActive = (i === hero._activeAxis);
+
+            // Active expanding ripple pulse
+            if (isActive && !prefersReducedMotion) {
+              const pulseR = 5 + ((time * 0.02) % 12);
+              const pulseAlpha = Math.max(0, 1 - (pulseR - 5) / 12);
+              ctx.beginPath();
+              ctx.arc(vx, vy, pulseR, 0, Math.PI * 2);
+              ctx.strokeStyle = `rgba(37, 99, 235, ${pulseAlpha * 0.7})`;
+              ctx.lineWidth = 1.4;
+              ctx.stroke();
+            }
+
+            // Core node
+            ctx.beginPath();
+            ctx.arc(vx, vy, isActive ? 6 : 4, 0, Math.PI * 2);
+            ctx.fillStyle = isActive ? '#2563EB' : '#3B82F6';
+            if (isActive) {
+              ctx.shadowColor = '#3B82F6';
+              ctx.shadowBlur = 10;
+            }
+            ctx.fill();
+            ctx.shadowBlur = 0;
+
+            ctx.beginPath();
+            ctx.arc(vx, vy, isActive ? 2.5 : 1.8, 0, Math.PI * 2);
+            ctx.fillStyle = '#FFFFFF';
+            ctx.fill();
+          });
+
+          // 6. Perimeter Vertex Labels with Live Stage Badges
+          if (entrance >= 0.8) {
+            criteria.forEach((crit, i) => {
+              const angle = -Math.PI / 2 + (i * Math.PI * 2) / axes;
+              const r = (maxR + 18) * entrance;
+              const lx = cx + Math.cos(angle) * r;
+              const ly = cy + Math.sin(angle) * r;
+              const isActive = (i === hero._activeAxis);
+              const curBadge = crit.steps[hero._userSteps[i]].badge;
+
+              ctx.font = isActive ? '800 11px "Source Sans 3", sans-serif' : '600 10px "Source Sans 3", sans-serif';
+              ctx.fillStyle = isActive ? '#1E40AF' : 'rgba(71, 85, 105, 0.85)';
+
+              const labelText = `${crit.name} (${curBadge})`;
+
+              if (i === 0) {
+                ctx.textAlign = 'center';
+                ctx.fillText(labelText, lx, ly - 4);
+              } else if (i === 1) {
+                ctx.textAlign = 'left';
+                ctx.fillText(labelText, lx + 2, ly - 2);
+              } else if (i === 2) {
+                ctx.textAlign = 'left';
+                ctx.fillText(labelText, lx + 2, ly + 8);
+              } else if (i === 3) {
+                ctx.textAlign = 'right';
+                ctx.fillText(labelText, lx - 2, ly + 8);
+              } else if (i === 4) {
+                ctx.textAlign = 'right';
+                ctx.fillText(labelText, lx - 2, ly - 2);
+              }
+            });
+          }
         }
 
         // ========================================================

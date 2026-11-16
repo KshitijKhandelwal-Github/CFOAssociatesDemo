@@ -83,28 +83,149 @@ html body,html .kfoot{font-family:'Source Sans 3','Source Sans 3 Fallback',sans-
   <div class="nav-overlay" id="navOverlay" aria-hidden="true"></div>
 </header>
 
-<main id="main-content">
-  <!-- Breadcrumb -->
-  <div class="k-bcrumb" aria-label="Breadcrumb">
-    <div class="k-bcrumb-inner">
-      <a href="../">Home</a>
-      <span>/</span>
-      <span aria-current="page">See If We're a Fit</span>
-    </div>
-  </div>
+<!-- Breadcrumb -->
+<nav class="k-bcrumb" aria-label="Breadcrumb">
+  <ol>
+    <li><a href="../">Home</a></li>
+    <li aria-current="page">See If We're a Fit</li>
+  </ol>
+</nav>
 
+<main id="main-content">
   <!-- Hero -->
   <section class="fit-hero" aria-label="Fit Qualification Matrix">
     <canvas class="hero-canvas" data-theme="matrix" aria-hidden="true"></canvas>
     <div class="fit-hero-inner">
-      <p class="fit-hero-ol">QUALIFICATION MATRIX</p>
-      <h1>We partner with <em>founder-led</em> businesses ready for institutional financial rigor.</h1>
-      <p class="fit-hero-sub">Fractional CFO leadership works best when there is alignment on timing, scale, and operational readiness. Before booking a strategy call, review our engagement criteria below.</p>
+      <div class="fit-hero-grid">
+        <!-- Left: Qualification Overview & Interactive Criteria Controls -->
+        <div class="fit-hero-left">
+          <p class="fit-hero-ol">Qualification Matrix</p>
+          <h1 class="fit-hero-h">We partner with <em>founder-led</em> businesses ready for institutional financial rigor.</h1>
+          <p class="fit-hero-sub">Fractional CFO leadership works best when there is strategic alignment on scale, timing, and operational readiness. Explore our 5-point qualification radar to evaluate your company's fit.</p>
+
+          <!-- Interactive 5 Criteria Value Inputs (Slider + Number Input) -->
+          <div class="fit-matrix-inputs" role="region" aria-label="Enter Qualification Values">
+            <div class="fit-input-row active" data-axis="0">
+              <div class="fit-row-meta">
+                <span class="fit-row-idx">01</span>
+                <div class="fit-row-text">
+                  <span class="fit-row-name">Revenue Scale</span>
+                  <span class="fit-row-target">Benchmark: ₹3Cr–₹100Cr</span>
+                </div>
+              </div>
+              <div class="fit-row-ctrls">
+                <input type="range" class="fit-range" min="0" max="4" value="2" step="1" data-axis="0" aria-label="Revenue Scale stage slider">
+                <div class="fit-val-box">
+                  <span class="fit-val-text" data-axis="0">₹15–50 Cr</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="fit-input-row" data-axis="1">
+              <div class="fit-row-meta">
+                <span class="fit-row-idx">02</span>
+                <div class="fit-row-text">
+                  <span class="fit-row-name">Strategic Inflection</span>
+                  <span class="fit-row-target">Benchmark: Seed to Series B</span>
+                </div>
+              </div>
+              <div class="fit-row-ctrls">
+                <input type="range" class="fit-range" min="0" max="4" value="3" step="1" data-axis="1" aria-label="Strategic Inflection milestone slider">
+                <div class="fit-val-box">
+                  <span class="fit-val-text" data-axis="1">Series A</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="fit-input-row" data-axis="2">
+              <div class="fit-row-meta">
+                <span class="fit-row-idx">03</span>
+                <div class="fit-row-text">
+                  <span class="fit-row-name">Outgrown Bookkeeping</span>
+                  <span class="fit-row-target">Benchmark: Strategic Modeling</span>
+                </div>
+              </div>
+              <div class="fit-row-ctrls">
+                <input type="range" class="fit-range" min="0" max="4" value="3" step="1" data-axis="2" aria-label="Accounting setup slider">
+                <div class="fit-val-box">
+                  <span class="fit-val-text" data-axis="2">Controller</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="fit-input-row" data-axis="3">
+              <div class="fit-row-meta">
+                <span class="fit-row-idx">04</span>
+                <div class="fit-row-text">
+                  <span class="fit-row-name">High ROI on Overhead</span>
+                  <span class="fit-row-target">Benchmark: Fractional CFO</span>
+                </div>
+              </div>
+              <div class="fit-row-ctrls">
+                <input type="range" class="fit-range" min="0" max="4" value="3" step="1" data-axis="3" aria-label="Leadership structure slider">
+                <div class="fit-val-box">
+                  <span class="fit-val-text" data-axis="3">Fract. CFO</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="fit-input-row" data-axis="4">
+              <div class="fit-row-meta">
+                <span class="fit-row-idx">05</span>
+                <div class="fit-row-text">
+                  <span class="fit-row-name">Collaborative Leadership</span>
+                  <span class="fit-row-target">Benchmark: Monthly Cadence</span>
+                </div>
+              </div>
+              <div class="fit-row-ctrls">
+                <input type="range" class="fit-range" min="0" max="4" value="3" step="1" data-axis="4" aria-label="Operating cadence slider">
+                <div class="fit-val-box">
+                  <span class="fit-val-text" data-axis="4">Bi-Weekly</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="fit-hero-actions">
+            <a href="#fitFormCard" class="btn-primary" id="btnApplyWithScores">Check Your Alignment <span class="arr" aria-hidden="true">→</span></a>
+            <button type="button" class="btn-secondary" id="btnResetScores">Reset to Benchmark ↺</button>
+          </div>
+        </div>
+
+        <!-- Right: Interactive Radar HUD & Detail Card -->
+        <div class="fit-hero-right">
+          <div class="fit-radar-hud" id="fitRadarHud">
+            <div class="fit-hud-badge">
+              <span class="hud-dot"></span>
+              <span class="hud-status" id="hudStatus">Overall Alignment: <strong id="hudOverallScore">92% (High Readiness)</strong></span>
+            </div>
+            <div class="fit-radar-placeholder" id="fitRadarPlaceholder" aria-hidden="true">
+              <!-- Interactive Pentagon Canvas rendered here -->
+            </div>
+            <div class="fit-hud-card" id="fitHudCard">
+              <div class="fit-hud-header">
+                <h3 class="fit-hud-title" id="hudTitle">01. Revenue Scale (₹3 Cr – ₹100 Cr)</h3>
+                <span class="fit-meter-val" id="hudMeterVal">Current: 95%</span>
+              </div>
+              <p class="fit-hud-desc" id="hudDesc">Founder-led, post-revenue scaling company generating between ₹3 Cr and ₹100 Cr (or $500K – $15M ARR).</p>
+              <div class="fit-hud-meter">
+                <div class="fit-meter-bar"><div class="fit-meter-fill" id="hudMeterFill" style="width: 95%;"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Scroll to criteria anchor -->
+      <a href="#fit-criteria" class="fit-scroll-down" aria-label="Scroll to Alignment Criteria and Assessment">
+        <span>Explore Alignment Criteria &amp; Assessment</span>
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M7 10l5 5 5-5"/></svg>
+      </a>
     </div>
   </section>
 
   <!-- Main Section -->
-  <section class="fit-main-section" aria-label="Alignment Criteria and Questionnaire">
+  <section class="fit-main-section" id="fit-criteria" aria-label="Alignment Criteria and Questionnaire">
     <div class="fit-main-inner">
       <!-- Left: Qualification Details -->
       <div>
@@ -265,21 +386,15 @@ html body,html .kfoot{font-family:'Source Sans 3','Source Sans 3 Fallback',sans-
       <div class="kfoot-social" role="list" aria-label="Social media links">
         <a href="https://www.linkedin.com/company/[company-handle]/" target="_blank" rel="noopener noreferrer" class="kfoot-social-link" aria-label="LinkedIn"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a>
         <a href="https://twitter.com/[company-handle]" target="_blank" rel="noopener noreferrer" class="kfoot-social-link" aria-label="Twitter / X"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 9.24h-3.308l-7.227-8.26-8.502 9.24h-3.308l8.502-9.24-7.227-8.26h3.308l7.227 8.26-8.502 9.24h3.308l7.227-8.26 8.502-9.24z"/></svg></a>
-        <a href="https://www.facebook.com/[company-handle]/" target="_blank" rel="noopener noreferrer" class="kfoot-social-link" aria-label="Facebook"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></a>
       </div>
     </div>
     <nav class="kfoot-links" aria-label="Footer navigation">
-      <div class="kfoot-column"><p class="kfoot-label">Company</p><ul role="list"><li><a href="../about/">About Us</a></li><li><a href="../about/#team">Team</a></li><li><a href="../our-work/">Our Work</a></li><li><a href="../insights/">Insights</a></li><li><a href="../careers/">Careers</a></li></ul></div>
+      <div class="kfoot-column"><p class="kfoot-label">Company</p><ul role="list"><li><a href="../about/">About Us</a></li><li><a href="../who-we-work-with/">Who We Work With</a></li><li><a href="../our-work/">Our Work</a></li><li><a href="../insights/">Insights</a></li><li><a href="../careers/">Careers</a></li></ul></div>
       <div class="kfoot-column"><p class="kfoot-label">Services</p><ul role="list"><li><a href="../what-we-do/#fractional-cfo">Fractional CFO</a></li><li><a href="../what-we-do/#virtual-cfo">Virtual CFO</a></li><li><a href="../what-we-do/#interim-cfo">Interim CFO</a></li><li><a href="../what-we-do/#transaction-advisory">Transaction Advisory</a></li><li><a href="../what-we-do/#fundraising-readiness">Fundraising Readiness</a></li><li><a href="../what-we-do/#financial-advisory">Financial Advisory</a></li></ul></div>
-      <div class="kfoot-column"><p class="kfoot-label">Resources</p><ul role="list"><li><a href="../what-we-do/#faq">FAQ</a></li><li><a href="../see-if-were-a-fit/">See If We're a Fit</a></li><li><a href="../who-we-work-with/">Who We Work With</a></li><li><a href="../contact/">Contact Us</a></li></ul></div>
-      <div class="kfoot-column"><p class="kfoot-label">Offices</p><p class="kfoot-detail" style="font-size:13px; line-height:1.6; color:#94A3B8;">Level 14, One World Center<br>Lower Parel, Mumbai, MH 400013<br><br>Direct: +91 (0) 22 4970 8200<br>advisory@cfoassociates.com</p></div>
+      <div class="kfoot-column"><p class="kfoot-label">Resources</p><ul role="list"><li><a href="../see-if-were-a-fit/">See If We're a Fit</a></li><li><a href="../our-work/">Case Studies</a></li><li><a href="../insights/">Guides &amp; Articles</a></li><li><a href="../contact/">Get in Touch</a></li></ul></div>
+      <div class="kfoot-column"><p class="kfoot-label">Contact</p><ul role="list"><li><a href="../contact/">Schedule a Call</a></li><li><a href="tel:[Phone Number]">[Phone Number]</a></li><li><a href="mailto:[Email Address]">[Email Address]</a></li><li>[Street Address]<br>[City], [State] [Postal Code]<br>[Country]</li></ul></div>
     </nav>
-  </div>
-  <div class="kfoot-bottom">
-    <div class="kfoot-bottom-inner">
-      <p class="kfoot-copy">&copy; 2026 CFOAssociates Advisory LLP. All rights reserved.</p>
-      <div class="kfoot-legal"><a href="../privacy-policy/">Privacy Policy</a><a href="../terms-of-service/">Terms of Service</a><a href="../cookie-policy/">Cookie Policy</a></div>
-    </div>
+    <div class="kfoot-legal"><p class="kfoot-legal-copy">&copy; [Year] CFOAssociates. All rights reserved.</p><nav class="kfoot-legal-links" aria-label="Legal links"><a href="../privacy-policy/">Privacy Policy</a><a href="../terms-of-service/">Terms of Service</a><a href="../cookie-policy/">Cookie Policy</a></nav></div>
   </div>
 </footer>
 

@@ -145,9 +145,10 @@ html body,html .kfoot{font-family:'Source Sans 3','Source Sans 3 Fallback',sans-
      HERO SECTION
      ============================================================ -->
 <section class="hero" aria-labelledby="hero-heading">
+  <canvas id="heroCanvas" class="hero-canvas" data-theme="growth" aria-hidden="true"></canvas>
   <div class="hero-inner">
     <div class="hero-left">
-      <span class="hero-overline">Fractional CFO &amp; Financial Advisory</span>
+      <!-- <span class="hero-overline">Fractional CFO &amp; Financial Advisory</span> -->
       <h1 id="hero-heading">Your business deserves a CFO who's done it before.</h1>
       <p class="hero-sub">We're not consultants who advise from the sidelines. We're <strong>former CFOs and VPs of Finance</strong> who embed in your business, build your finance function, and help you scale — from first fundraise to exit.</p>
       <div class="hero-cta-group">
@@ -156,7 +157,7 @@ html body,html .kfoot{font-family:'Source Sans 3','Source Sans 3 Fallback',sans-
           <a href="./services/" class="btn btn-secondary">Explore Services <span class="arr" aria-hidden="true">→</span></a>
         </div>
         <div class="hero-social-proof">
-          <span class="hero-micro">Trusted by [Number]+ founder-led companies</span>
+          <span class="hero-micro">Trusted by 100+ founder-led companies</span>
           <div class="avatar-stack">
             <img src="./assets/images/avatars/client-1.jpg" alt="Client" width="38" height="38" loading="eager">
             <img src="./assets/images/avatars/client-2.jpg" alt="Client" width="38" height="38" loading="eager">
@@ -173,44 +174,52 @@ html body,html .kfoot{font-family:'Source Sans 3','Source Sans 3 Fallback',sans-
 <!-- ============================================================
      LOGOS / STATS BAR
      ============================================================ -->
-<section class="logos-section" aria-label="Client statistics and logos">
+<section class="logos-section" aria-label="Client statistics and partner network">
   <div class="logos-dark">
-    <span class="logos-label">Results</span>
+    <span class="logos-label">Track Record</span>
     <div class="logos-dark-divider"></div>
     <div class="logos-stat">
-      <div class="logos-stat-num">[Number]<span>+</span></div>
-      <div class="logos-stat-lbl">COMPANIES SERVED</div>
+      <div class="logos-stat-num"><span class="stat-counter" data-target="120">0</span><span>+</span></div>
+      <div class="logos-stat-lbl">COMPANIES SCALED</div>
     </div>
     <div class="logos-dark-divider"></div>
     <div class="logos-stat">
-      <div class="logos-stat-num">$[Number]B<span>+</span></div>
+      <div class="logos-stat-num">$<span class="stat-counter" data-target="1.4" data-decimals="1">0</span>B<span>+</span></div>
       <div class="logos-stat-lbl">TRANSACTION VALUE</div>
     </div>
     <div class="logos-dark-divider"></div>
     <div class="logos-stat">
-      <div class="logos-stat-num">$[Number]M<span>+</span></div>
+      <div class="logos-stat-num">$<span class="stat-counter" data-target="350">0</span>M<span>+</span></div>
       <div class="logos-stat-lbl">CAPITAL RAISED</div>
     </div>
   </div>
   <div class="logos-light">
-    <div class="logos-track" id="logosTrack">
-      <img src="./assets/images/logos/client-logo-1.svg" alt="[Client Logo]" height="30" loading="eager">
-      <img src="./assets/images/logos/client-logo-2.svg" alt="[Client Logo]" height="30" loading="eager">
-      <img src="./assets/images/logos/client-logo-3.svg" alt="[Client Logo]" height="30" loading="eager">
-      <img src="./assets/images/logos/client-logo-4.svg" alt="[Client Logo]" height="30" loading="eager">
-      <img src="./assets/images/logos/client-logo-5.svg" alt="[Client Logo]" height="30" loading="eager">
-      <img src="./assets/images/logos/client-logo-6.svg" alt="[Client Logo]" height="30" loading="eager">
-      <img src="./assets/images/logos/client-logo-7.svg" alt="[Client Logo]" height="30" loading="eager">
-      <img src="./assets/images/logos/client-logo-8.svg" alt="[Client Logo]" height="30" loading="eager">
-      <!-- Duplicate set for seamless infinite scroll -->
-      <img src="./assets/images/logos/client-logo-1.svg" alt="[Client Logo]" height="30" loading="eager">
-      <img src="./assets/images/logos/client-logo-2.svg" alt="[Client Logo]" height="30" loading="eager">
-      <img src="./assets/images/logos/client-logo-3.svg" alt="[Client Logo]" height="30" loading="eager">
-      <img src="./assets/images/logos/client-logo-4.svg" alt="[Client Logo]" height="30" loading="eager">
-      <img src="./assets/images/logos/client-logo-5.svg" alt="[Client Logo]" height="30" loading="eager">
-      <img src="./assets/images/logos/client-logo-6.svg" alt="[Client Logo]" height="30" loading="eager">
-      <img src="./assets/images/logos/client-logo-7.svg" alt="[Client Logo]" height="30" loading="eager">
-      <img src="./assets/images/logos/client-logo-8.svg" alt="[Client Logo]" height="30" loading="eager">
+    <div class="logos-badge-wrap">
+      <div class="logos-badge">
+        <span class="live-dot" aria-hidden="true"></span>
+        <span>Client Network</span>
+      </div>
+    </div>
+    <div class="logos-marquee-wrap">
+      <div class="logos-track" id="logosTrack">
+        <img src="./assets/images/logos/client-logo-1.svg" alt="Fintech &amp; Payments Client" title="Fintech &amp; Payments" height="32" loading="eager">
+        <img src="./assets/images/logos/client-logo-2.svg" alt="Enterprise SaaS Client" title="Enterprise SaaS" height="32" loading="eager">
+        <img src="./assets/images/logos/client-logo-3.svg" alt="HealthTech Client" title="HealthTech" height="32" loading="eager">
+        <img src="./assets/images/logos/client-logo-4.svg" alt="AI Infrastructure Client" title="AI Infrastructure" height="32" loading="eager">
+        <img src="./assets/images/logos/client-logo-5.svg" alt="B2B Marketplace Client" title="B2B Marketplace" height="32" loading="eager">
+        <img src="./assets/images/logos/client-logo-6.svg" alt="Logistics &amp; Supply Chain Client" title="Logistics &amp; Supply Chain" height="32" loading="eager">
+        <img src="./assets/images/logos/client-logo-7.svg" alt="Consumer Tech Client" title="Consumer Tech" height="32" loading="eager">
+        <img src="./assets/images/logos/client-logo-8.svg" alt="Advanced Manufacturing Client" title="Advanced Manufacturing" height="32" loading="eager">
+        <!-- Duplicate set for seamless infinite scroll -->
+        <img src="./assets/images/logos/client-logo-1.svg" alt="Fintech &amp; Payments Client" title="Fintech &amp; Payments" height="32" loading="eager">
+        <img src="./assets/images/logos/client-logo-2.svg" alt="Enterprise SaaS Client" title="Enterprise SaaS" height="32" loading="eager">
+        <img src="./assets/images/logos/client-logo-3.svg" alt="HealthTech Client" title="HealthTech" height="32" loading="eager">
+        <img src="./assets/images/logos/client-logo-4.svg" alt="AI Infrastructure Client" title="AI Infrastructure" height="32" loading="eager">
+        <img src="./assets/images/logos/client-logo-5.svg" alt="B2B Marketplace Client" title="B2B Marketplace" height="32" loading="eager">
+        <img src="./assets/images/logos/client-logo-6.svg" alt="Logistics &amp; Supply Chain Client" title="Logistics &amp; Supply Chain" height="32" loading="eager">
+        <img src="./assets/images/logos/client-logo-7.svg" alt="Consumer Tech Client" title="Consumer Tech" height="32" loading="eager">
+        <img src="./assets/images/logos/client-logo-8.svg" alt="Advanced Manufacturing Client" title="Advanced Manufacturing" height="32" loading="eager">
+      </div>
     </div>
   </div>
 </section>
@@ -283,7 +292,7 @@ html body,html .kfoot{font-family:'Source Sans 3','Source Sans 3 Fallback',sans-
     <div class="why-c-statement">
       <span class="why-overline">What We Do</span>
       <h2 id="why-heading">Finance leadership that moves as fast as you do.</h2>
-      <p class="lead" style="color:rgba(255,255,255,0.5);">From day-to-day financial operations to board-level strategy, we cover the full spectrum of CFO responsibilities — without the full-time cost.</p>
+      <p class="lead" style="color:#CBD5E1;">From day-to-day financial operations to board-level strategy, we cover the full spectrum of CFO responsibilities — without the full-time cost.</p>
     </div>
     <div class="why-c-grid">
       <!-- Card 1: Fractional CFO -->

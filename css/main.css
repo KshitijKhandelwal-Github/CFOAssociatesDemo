@@ -4216,7 +4216,6 @@ ul, ol {
 }
 
 .ab-how-item:first-child {
-  padding-top: 0;
   border-top: 1px solid var(--border);
 }
 

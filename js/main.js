@@ -717,6 +717,9 @@
         canvas.height = height * dpr;
         ctx.setTransform(1, 0, 0, 1, 0, 0); // reset transform
         ctx.scale(dpr, dpr);
+        if (getComputedStyle(canvas).display !== 'none' && !animId && !prefersReducedMotion) {
+          animId = requestAnimationFrame(render);
+        }
       }
       resize();
       window.addEventListener('resize', resize, { passive: true });
@@ -753,6 +756,10 @@
 
       function render() {
         if (!isVisible) return;
+        if (getComputedStyle(canvas).display === 'none') {
+          animId = null;
+          return;
+        }
 
         ctx.clearRect(0, 0, width, height);
 

@@ -83,15 +83,15 @@ html body,html .kfoot{font-family:'Source Sans 3','Source Sans 3 Fallback',sans-
   <div class="nav-overlay" id="navOverlay" aria-hidden="true"></div>
 </header>
 
+<!-- Breadcrumb -->
+<nav class="k-bcrumb" aria-label="Breadcrumb">
+  <ol>
+    <li><a href="../">Home</a></li>
+    <li aria-current="page">Careers</li>
+  </ol>
+</nav>
+
 <main id="main-content">
-  <!-- Breadcrumb -->
-  <div class="k-bcrumb" aria-label="Breadcrumb">
-    <div class="k-bcrumb-inner">
-      <a href="../">Home</a>
-      <span>/</span>
-      <span aria-current="page">Careers</span>
-    </div>
-  </div>
 
   <!-- Hero -->
   <section class="car-hero" aria-label="Careers Hero">
@@ -264,40 +264,16 @@ html body,html .kfoot{font-family:'Source Sans 3','Source Sans 3 Fallback',sans-
       </div>
     </div>
     <nav class="kfoot-links" aria-label="Footer navigation">
-      <div class="kfoot-column"><p class="kfoot-label">Company</p><ul role="list"><li><a href="../about/">About Us</a></li><li><a href="../about/#team">Team</a></li><li><a href="../our-work/">Our Work</a></li><li><a href="../insights/">Insights</a></li><li><a href="../careers/">Careers</a></li></ul></div>
+      <div class="kfoot-column"><p class="kfoot-label">Company</p><ul role="list"><li><a href="../about/">About Us</a></li><li><a href="../what-we-do/">What We Do</a></li><li><a href="../who-we-work-with/">Who We Work With</a></li><li><a href="../careers/">Careers</a></li></ul></div>
       <div class="kfoot-column"><p class="kfoot-label">Services</p><ul role="list"><li><a href="../what-we-do/#fractional-cfo">Fractional CFO</a></li><li><a href="../what-we-do/#virtual-cfo">Virtual CFO</a></li><li><a href="../what-we-do/#interim-cfo">Interim CFO</a></li><li><a href="../what-we-do/#transaction-advisory">Transaction Advisory</a></li><li><a href="../what-we-do/#fundraising-readiness">Fundraising Readiness</a></li><li><a href="../what-we-do/#financial-advisory">Financial Advisory</a></li></ul></div>
-      <div class="kfoot-column"><p class="kfoot-label">Resources</p><ul role="list"><li><a href="../what-we-do/#faq">FAQ</a></li><li><a href="../see-if-were-a-fit/">See If We're a Fit</a></li><li><a href="../who-we-work-with/">Who We Work With</a></li><li><a href="../contact/">Contact Us</a></li></ul></div>
-      <div class="kfoot-column"><p class="kfoot-label">Offices</p><p class="kfoot-detail" style="font-size:13px; line-height:1.6; color:#94A3B8;">Level 14, One World Center<br>Lower Parel, Mumbai, MH 400013<br><br>Direct: +91 (0) 22 4970 8200<br>advisory@cfoassociates.com</p></div>
+      <div class="kfoot-column"><p class="kfoot-label">Resources</p><ul role="list"><li><a href="../see-if-were-a-fit/">See If We're a Fit</a></li><li><a href="../our-work/">Case Studies</a></li><li><a href="../insights/">Guides &amp; Articles</a></li></ul></div>
+      <div class="kfoot-column"><p class="kfoot-label">Contact</p><ul role="list"><li><a href="../contact/">Schedule a Call</a></li><li><a href="tel:[Phone Number]">[Phone Number]</a></li><li><a href="mailto:[Email Address]">[Email Address]</a></li><li>[Street Address]<br>[City], [State] [Postal Code]<br>[Country]</li></ul></div>
     </nav>
-  </div>
-  <div class="kfoot-bottom">
-    <div class="kfoot-bottom-inner">
-      <p class="kfoot-copy">&copy; 2026 CFOAssociates Advisory LLP. All rights reserved.</p>
-      <div class="kfoot-legal"><a href="../privacy-policy/">Privacy Policy</a><a href="../terms-of-service/">Terms of Service</a><a href="../cookie-policy/">Cookie Policy</a></div>
-    </div>
+    <div class="kfoot-legal"><p class="kfoot-legal-copy">&copy; [Year] CFOAssociates. All rights reserved.</p><nav class="kfoot-legal-links" aria-label="Legal links"><a href="../privacy-policy/">Privacy Policy</a><a href="../terms-of-service/">Terms of Service</a><a href="../cookie-policy/">Cookie Policy</a></nav></div>
   </div>
 </footer>
 
 <script>
-// Hamburger toggle
-const navToggle = document.getElementById('navToggle');
-const navMobile = document.getElementById('navMobile');
-const navOverlay = document.getElementById('navOverlay');
-if (navToggle && navMobile) {
-  navToggle.addEventListener('click', () => {
-    const open = navMobile.classList.toggle('active');
-    navToggle.setAttribute('aria-expanded', open);
-    if (navOverlay) navOverlay.classList.toggle('active', open);
-  });
-  if (navOverlay) {
-    navOverlay.addEventListener('click', () => {
-      navMobile.classList.remove('active');
-      navToggle.setAttribute('aria-expanded', 'false');
-      navOverlay.classList.remove('active');
-    });
-  }
-}
-
 // Cookie Banner
 const kycBanner = document.getElementById('kycBanner');
 if (kycBanner && !localStorage.getItem('cfoa_cookies')) {
